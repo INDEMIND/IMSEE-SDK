@@ -1,0 +1,5 @@
+%YAML:1.0
+
+display: true
+sleep_ms_per_frame: 100
+log_to_file: false

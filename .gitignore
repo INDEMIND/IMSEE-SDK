@@ -1,0 +1,17 @@
+*.py[cod]
+*.egg
+*.egg-info
+# *.dll
+*.exe
+*.png
+*.jpg
+*.bmp
+*.db
+# *.lib
+*.pdb
+*.ilk
+.vscode
+dist
+build
+demo/build
+demo/output
