@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+
+  <include file="$(find imsee_ros_wrapper)/launch/start.launch" />
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find imsee_ros_wrapper)/rviz/indemind.rviz" output="screen" />
+
+</launch>

@@ -1,0 +1,7 @@
+<library path="lib/libimsee_wrapper">
+  <class name="imsee/ROSWrapperNodelet"
+         type="imsee::ROSWrapperNodelet"
+         base_class_type="nodelet::Nodelet">
+    <description>This is the nodelet of ROS interface for Indemind IMSEE camera.</description>
+  </class>
+</library>

@@ -62,6 +62,32 @@ demo:
 	sh ./scripts/cp_files.sh
 .PHONY: demo
 
+# ros
+
+ros:
+	@$(call echo,Make $@)
+ifeq ($(HOST_OS),Linux)
+	@cd ./ros && catkin_make -DCMAKE_BUILD_TYPE=$(BUILD_TYPE)
+	sh ./scripts/cp_files_ros.sh
+else
+	$(error "Can't make ros on $(HOST_OS)")
+endif
+
+.PHONY: ros
+
+cleanros:
+	@$(call echo,Make $@)
+	@$(call rm,./ros/build/)
+	@$(call rm,./ros/devel/)
+	@$(call rm,./ros/install/)
+	@$(call rm,./ros/.catkin_workspace)
+	@$(call rm,./ros/src/CMakeLists.txt)
+	@$(call rm_f,*INFO*,$(HOME)/.ros/)
+	@$(call rm_f,*WARNING*,$(HOME)/.ros/)
+	@$(call rm_f,*ERROR*,$(HOME)/.ros/)
+	@$(call rm_f,*FATAL*,$(HOME)/.ros/)
+
+.PHONY: cleanros
 
 # clean
 
