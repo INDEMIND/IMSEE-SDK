@@ -45,11 +45,11 @@ string(STRIP "${CMAKE_CXX_FLAGS}" CMAKE_CXX_FLAGS)
 message(STATUS "C_FLAGS: ${CMAKE_C_FLAGS}")
 message(STATUS "CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 
-#if(OS_UBUNTU)
-#  set(MNN_LIB_DIR ${PRO_DIR}/src/detector/lib/x86-64)
-#else ()
-#  set(MNN_LIB_DIR ${PRO_DIR}/src/detector/lib/aarch64)
-#endif ()
+if(OS_UBUNTU)
+  set(MNN_LIB_DIR ${PRO_DIR}/src/detector/lib/x86-64)
+else ()
+  set(MNN_LIB_DIR ${PRO_DIR}/src/detector/lib/aarch64)
+endif ()
 
 # packages
 
@@ -109,7 +109,7 @@ endif()
 
 add_executable(${NAME} ${THIS_SRCS})
 target_link_libraries(${NAME}
-# ${MNN_LIB_DIR}/libMNN.so
+${MNN_LIB_DIR}/libMNN.so
 ${__link_libs}
 pthread
 )
