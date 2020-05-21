@@ -19,7 +19,6 @@ DEMO_OUTPUT_DIR=$PROJ_DIR/demo/output/bin
 DRIVER_BASE_DIR=$PROJ_DIR/src/driver/lib
 DETECTOR_BASE_DIR=$PROJ_DIR/src/detector
 MNN_CONFIG_DIR=$DETECTOR_BASE_DIR/config
-MNN_LIB_BASE_DIR=$DETECTOR_BASE_DIR/lib
 
 # check host arch
 HOST_ARCH=$(uname -m)
@@ -27,10 +26,8 @@ HOST_ARCH=$(uname -m)
 
 if [ "$HOST_ARCH" = "x86_64" ]; then
   DRIVER_DIR=$DRIVER_BASE_DIR/x86-64
-  MNN_LIB_DIR=$MNN_LIB_BASE_DIR/x86-64
 elif [ "$HOST_ARCH" = "aarch64" ]; then
   DRIVER_DIR=$DRIVER_BASE_DIR/aarch64
-  MNN_LIB_DIR=$MNN_LIB_BASE_DIR/aarch64
 else
   echo "Unknown host arch :("
   exit 1
@@ -41,13 +38,6 @@ if [ ! -f "$DEMO_OUTPUT_DIR/libusbdriver.so" ]; then
   ln -s $DRIVER_DIR/libusbdriver.so $DEMO_OUTPUT_DIR
   echo "Finish cp libusbdriver.so!"
 fi
-
-if [ ! -f "$DEMO_OUTPUT_DIR/libMNN.so" ]; then
-  ln -s $MNN_LIB_DIR/libMNN.so $DEMO_OUTPUT_DIR
-  echo "Finish cp libMNN.so!"
-fi
-
-
 
 if [ ! -f "$DEMO_OUTPUT_DIR/blazeface.mnn" ]; then
   ln -s $MNN_CONFIG_DIR/blazeface.mnn $DEMO_OUTPUT_DIR

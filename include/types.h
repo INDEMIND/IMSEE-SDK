@@ -13,6 +13,7 @@
 // limitations under the License.
 #ifndef TYPES_H_
 #define TYPES_H_
+#include <functional>
 #include <iostream>
 #include <map>
 #include <opencv2/core.hpp>
