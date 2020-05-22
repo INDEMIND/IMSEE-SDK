@@ -47,8 +47,10 @@ message(STATUS "CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 
 if(OS_UBUNTU)
   set(MNN_LIB_DIR ${PRO_DIR}/src/detector/lib/x86-64)
+  set(INDEMIND_LIB_DIR ${PRO_DIR}/lib/x86-64)
 else ()
   set(MNN_LIB_DIR ${PRO_DIR}/src/detector/lib/aarch64)
+  set(INDEMIND_LIB_DIR ${PRO_DIR}/lib/aarch64)
 endif ()
 
 # packages
@@ -95,7 +97,7 @@ set(multiValueArgs SRCS)
 cmake_parse_arguments(THIS "${options}" "${oneValueArgs}"
                         "${multiValueArgs}" ${ARGN})
 
-set(__link_libs ${PRO_DIR}/lib/libindemind.so)
+set(__link_libs ${INDEMIND_LIB_DIR}/libindemind.so)
 set(__dll_search_paths ${PRO_DIR}/install/bin)
 
 list(APPEND __link_libs ${OpenCV_LIBS})
