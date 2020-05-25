@@ -94,6 +94,8 @@
 
 #ifdef ANDROID
 #  include <android/log.h>
+#elif WIN32
+
 #else
 #include <pthread.h>
 #include <sys/time.h>
@@ -213,6 +215,8 @@ class CERES_EXPORT MessageLogger {
                           tag_.c_str(),
                           "terminating.\n");
     }
+#elif WIN32
+
 #else
     // For Ubuntu/Mac/Windows
     // If not building on Android, log all output to std::cerr.

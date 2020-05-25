@@ -21,6 +21,7 @@
 #include <thread>
 #ifdef WIN32
 #include <Windows.h>
+#define PATH_MAX 4096
 #endif
 using namespace indem;
 
@@ -85,7 +86,9 @@ int main(int argc, char **argv) {
         std::this_thread::sleep_for(std::chrono::microseconds(1));
       }
     }
+#ifdef __linux
     LOG(INFO) << "Finish save imu data!";
+#endif
     ofs.flush();
     ofs.close();
   });
@@ -122,6 +125,7 @@ int main(int argc, char **argv) {
   record_thread.join();
   float elapsed_ms =
       times::count<times::microseconds>(time_end - time_beg) * 0.001f;
+#ifdef __linux
   LOG(INFO) << "Time beg: " << times::to_local_string(time_beg)
             << ", end: " << times::to_local_string(time_end)
             << ", cost: " << elapsed_ms << "ms";
@@ -129,5 +133,6 @@ int main(int argc, char **argv) {
             << ", fps: " << (1000.f * img_count / elapsed_ms);
   LOG(INFO) << "Imu count: " << imu_count
             << ", hz: " << (1000.f * imu_count / elapsed_ms);
+#endif
   return 0;
 }

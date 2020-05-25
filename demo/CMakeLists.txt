@@ -48,9 +48,12 @@ message(STATUS "CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 if(OS_UBUNTU)
   set(MNN_LIB_DIR ${PRO_DIR}/src/detector/lib/x86-64)
   set(INDEMIND_LIB_DIR ${PRO_DIR}/lib/x86-64)
-else ()
+elseif(OS_TEGRA)
   set(MNN_LIB_DIR ${PRO_DIR}/src/detector/lib/aarch64)
   set(INDEMIND_LIB_DIR ${PRO_DIR}/lib/aarch64)
+else (OS_WIN)
+  set(MNN_LIB_DIR ${PRO_DIR}/src/detector/lib/win10-x64-vs19)
+  set(INDEMIND_LIB_DIR ${PRO_DIR}/lib/win10-x64-vs19-opencv3.3.0)
 endif ()
 
 # packages
@@ -97,8 +100,17 @@ set(multiValueArgs SRCS)
 cmake_parse_arguments(THIS "${options}" "${oneValueArgs}"
                         "${multiValueArgs}" ${ARGN})
 
+IF(WIN32)
+set(__link_libs ${INDEMIND_LIB_DIR}/indemind.lib)
+ELSE(WIN32)
 set(__link_libs ${INDEMIND_LIB_DIR}/libindemind.so)
+ENDIF(WIN32)
+
+IF(WIN32)
+set(__dll_search_paths ${PRO_DIR}/src/detector/lib/win10-x64-vs19;${PRO_DIR}/lib/win10-x64-vs19-opencv3.3.0)
+ELSE(WIN32)
 set(__dll_search_paths ${PRO_DIR}/install/bin)
+ENDIF(WIN32)
 
 list(APPEND __link_libs ${OpenCV_LIBS})
 list(APPEND __dll_search_paths ${OpenCV_LIB_SEARCH_PATH})
@@ -110,11 +122,18 @@ if(THIS_WITH_PCL)
 endif()
 
 add_executable(${NAME} ${THIS_SRCS})
+IF(WIN32)
+target_link_libraries(${NAME}
+${MNN_LIB_DIR}/MNN.lib
+${__link_libs}
+)
+ELSE(WIN32)
 target_link_libraries(${NAME}
 ${MNN_LIB_DIR}/libMNN.so
 ${__link_libs}
 pthread
 )
+ENDIF(WIN32)
 target_create_scripts(${NAME} DLL_SEARCH_PATHS ${__dll_search_paths})
 
 if(THIS_WITH_PCL)

@@ -60,10 +60,12 @@ int main(int argc, char **argv) {
 
   float elapsed_ms =
       times::count<times::microseconds>(time_end - time_beg) * 0.001f;
+#ifdef __linux
   LOG(INFO) << "Time beg: " << times::to_local_string(time_beg)
             << ", end: " << times::to_local_string(time_end)
             << ", cost: " << elapsed_ms << "ms";
   LOG(INFO) << "rectified count: " << rectified_img_count
             << ", fps: " << (1000.f * rectified_img_count / elapsed_ms);
+#endif
   return 0;
 }

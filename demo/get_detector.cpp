@@ -43,9 +43,11 @@ int main(int argc, char **argv) {
           ++detector_count;
           for (int i = 0; i < info.finalBoxInfo.size(); ++i) {
             BoxInfo &obj = info.finalBoxInfo[i];
+#ifdef __linux
             LOG(INFO) << "finalBoxInfo[" << i << "]: "
                       << "name: " << name[obj.class_name]
                       << ", score:" << obj.score;
+#endif
           }
         }
       });
@@ -67,10 +69,12 @@ int main(int argc, char **argv) {
 
   float elapsed_ms =
       times::count<times::microseconds>(time_end - time_beg) * 0.001f;
+#ifdef __linux
   LOG(INFO) << "Time beg: " << times::to_local_string(time_beg)
             << ", end: " << times::to_local_string(time_end)
             << ", cost: " << elapsed_ms << "ms";
   LOG(INFO) << "depth count: " << detector_count
             << ", fps: " << (1000.f * detector_count / elapsed_ms);
+#endif
   return 0;
 }

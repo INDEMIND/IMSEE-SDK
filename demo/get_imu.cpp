@@ -45,11 +45,13 @@ int main(int argc, char **argv) {
   int imu_count = 0;
   m_pSDK->RegistModuleIMUCallback([&imu_count](ImuData imu) {
     if (imu_count % 100 == 0) {
+#ifdef __linux
       LOG(INFO) << "imu timestamp: " << imu.timestamp
                 << ", accel x: " << imu.accel[0]
                 << ", accel y: " << imu.accel[1]
                 << ", accel z: " << imu.accel[2] << ", gyro x: " << imu.gyro[0]
                 << ", gyro y: " << imu.gyro[1] << ", gyro z: " << imu.gyro[2];
+#endif
     }
     ++imu_count;
   });
@@ -68,6 +70,7 @@ int main(int argc, char **argv) {
 
   float elapsed_ms =
       times::count<times::microseconds>(time_end - time_beg) * 0.001f;
+#ifdef __linux
   LOG(INFO) << "Time beg: " << times::to_local_string(time_beg)
             << ", end: " << times::to_local_string(time_end)
             << ", cost: " << elapsed_ms << "ms";
@@ -75,6 +78,7 @@ int main(int argc, char **argv) {
             << ", fps: " << (1000.f * img_count / elapsed_ms);
   LOG(INFO) << "Imu count: " << imu_count
             << ", hz: " << (1000.f * imu_count / elapsed_ms);
+#endif
   delete m_pSDK;
   return 0;
 }
