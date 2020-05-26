@@ -84,7 +84,7 @@ include_directories(
 set(LINK_LIBS
   ${catkin_LIBRARIES}
   ${OpenCV_LIBS}
-  ${SDK_DIR}/lib/libindemind.so
+  ${SDK_DIR}/output/lib/libindemind.so
 )
 
 add_library(imsee_wrapper src/wrapper_nodelet.cc)
