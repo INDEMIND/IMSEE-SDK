@@ -95,6 +95,7 @@ set(LINK_LIBS
   ${catkin_LIBRARIES}
   ${OpenCV_LIBS}
   ${INDEMIND_LIB_DIR}/libindemind.so
+  ${MNN_LIB_DIR}/libMNN.so
 )
 
 add_library(imsee_wrapper src/wrapper_nodelet.cc)
