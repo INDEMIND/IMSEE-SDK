@@ -95,4 +95,6 @@ clean:
 	@$(call echo,Make $@)
 	@$(call rm,./demo/build/)
 	@$(call rm,./demo/output/)
-
+ifeq ($(HOST_OS),Linux)
+	@$(MAKE) cleanros
+endif
