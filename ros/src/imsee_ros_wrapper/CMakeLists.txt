@@ -15,6 +15,9 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(imsee_ros_wrapper)
 
+get_filename_component(SDK_DIR "${PROJECT_SOURCE_DIR}/../../.." ABSOLUTE)
+include(${SDK_DIR}/cmake/Common.cmake)
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
@@ -64,7 +67,14 @@ catkin_package(
   CATKIN_DEPENDS cv_bridge geometry_msgs image_transport message_runtime nodelet roscpp sensor_msgs std_msgs tf
 )
 
-get_filename_component(SDK_DIR "${PROJECT_SOURCE_DIR}/../../.." ABSOLUTE)
+if(OS_UBUNTU)
+  set(MNN_LIB_DIR ${SDK_DIR}/src/detector/lib/x86-64)
+  set(INDEMIND_LIB_DIR ${SDK_DIR}/lib/x86-64)
+else()
+  set(MNN_LIB_DIR ${SDK_DIR}/src/detector/lib/aarch64)
+  set(INDEMIND_LIB_DIR ${SDK_DIR}/lib/aarch64)
+endif ()
+
 #LIST(APPEND CMAKE_PREFIX_PATH ${SDK_DIR}/_install/lib/cmake)
 
 LIST(APPEND CMAKE_MODULE_PATH cmake)
@@ -84,7 +94,8 @@ include_directories(
 set(LINK_LIBS
   ${catkin_LIBRARIES}
   ${OpenCV_LIBS}
-  ${SDK_DIR}/output/lib/libindemind.so
+  ${INDEMIND_LIB_DIR}/libindemind.so
+  ${MNN_LIB_DIR}/libMNN.so
 )
 
 add_library(imsee_wrapper src/wrapper_nodelet.cc)

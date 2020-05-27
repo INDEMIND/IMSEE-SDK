@@ -12,7 +12,12 @@
 *.ilk
 .vscode
 dist
+
+#build
 build
-demo/build
-demo/output
+output
+
+#ros
 devel
+.catkin_workspace
+ros/src/CMakeLists.txt
