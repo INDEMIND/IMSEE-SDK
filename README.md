@@ -105,36 +105,34 @@ make demo
 
 #### windows下编译样例
 
-准备软件：
-1，CMake(3.0以上)
-2，Visual Studio 2019
-3，opencv3.3.1(https://sourceforge.net/projects/opencvlibrary/files/opencv-win/3.3.1/opencv-3.3.1-vc14.exe/download)
-4，IMSEE-SDK(双目SDK)
-5，Driver_Win64-master(双目驱动)
+**准备软件**
+1. [CMake(3.0以上)](https://github.com/Kitware/CMake/releases/download/v3.17.2/cmake-3.17.2-win64-x64.msi)
+2. [Visual Studio 2019](https://download.visualstudio.microsoft.com/download/pr/0fed0c12-ccd3-4767-b151-a616aaf99d86/9aa953f461b054c7428d62c1a3ed2744776621659121b804a1b0bd79bf2b3e5a/vs_Community.exe)
+3. [opencv3.3.1](https://sourceforge.net/projects/opencvlibrary/files/opencv-win/3.3.1/opencv-3.3.1-vc14.exe/download)
+4. IMSEE-SDK(双目SDK)
 
-步骤：
-一、vs2019编译opencv3.3.1
-1. 双击"opencv-3.3.1-vc14.exe"，解压文件到指定目录下。例如解压目录为："D:\...\opencv331"。
-2. 启动CMake，在"Where is the source code"中输入opencv源码路径。例如："D:\...\opencv331\opencv\sources";
-   在"Where to build the binaries"中输入"opencv构建目录"。例如："D:\...\opencv331\opencv\build-win10-x64-vs19"。
-3. 点击"Configure"按钮，选择编译器为"Visual Studio 16 2019"，选择编译器平台为"x64"。
-   点击"Finish"按钮，此时CMake进行第一次编译配置。
-4. 第一次配置"Configuring done"后，在配置窗口中选中"BUILD_opencv_world"，取消选中"BUILD_DOCS"、"BUILD_EXAMPLES"、"BUILD_TESTS"(取消选中可加速opencv编译)。
-   再点击"Configure"按钮，进行第二次编译配置。
-   第二次配置"Configuring done"后，点击"Generate"按钮，进行win项目生成。
-   "Generating done"后，点击"Open Project"按钮(或直接用vs2019打开构建目录下的OpenCV.sln)。
-5. 在vs2019中选择"Release"版本，点击"生成"->"生成解决方案"，开始编译opencv。
-   生成的文件在"opencv构建目录\bin\Release"下。
-6. 将"opencv构建目录\bin\Release"添加到环境变量"PATH"。例如："D:\...\opencv331\opencv\build-win10-x64-vs19\bin\Release"。
-7. 新建系统变量"OpenCV_DIR"，值为"opencv构建目录"。例如："D:\CLanguage\OpenSourse\OpenCV\opencv331\opencv\build-win10-x64-vs19"。
+**步骤**
+1. vs2019编译opencv3.3.1
+    1. 双击"opencv-3.3.1-vc14.exe"，解压文件到指定目录下。例如解压目录为："D:\\...\opencv331"。
+    2. 启动CMake，在"Where is the source code"中输入opencv源码路径。例如："D:\\...\opencv331\opencv\sources";
+        在"Where to build the binaries"中输入"opencv构建目录"。例如："D:\\...\opencv331\opencv\build-win10-x64-vs19"。
+    3. 点击"Configure"按钮，选择编译器为"Visual Studio 16 2019"，选择编译器平台为"x64"。
+        点击"Finish"按钮，此时CMake进行第一次编译配置。
+    4. 第一次配置"Configuring done"后，在配置窗口中选中"BUILD_opencv_world"，取消选中"BUILD_DOCS"、"BUILD_EXAMPLES"、"BUILD_TESTS"(取消选中可加速opencv编译)。
+        再点击"Configure"按钮，进行第二次编译配置。
+        第二次配置"Configuring done"后，点击"Generate"按钮，进行win项目生成。
+        "Generating done"后，点击"Open Project"按钮(或直接用vs2019打开构建目录下的OpenCV.sln)。
+    5. 在vs2019中选择"Release"版本，点击"生成"->"生成解决方案"，开始编译opencv。
+    生成的文件在"opencv构建目录\bin\Release"下。
+    6. 将"opencv构建目录\bin\Release"添加到环境变量"PATH"。例如："D:\\...\opencv331\opencv\build-win10-x64-vs19\bin\Release"。
+    7. 新建系统变量"OpenCV_DIR"，值为"opencv构建目录"。例如："D:\\CLanguage\OpenSourse\OpenCV\opencv331\opencv\build-win10-x64-vs19"。
 
-二、vs2019编译"IMSEE-SDK\demo"
-1. 双击"IMSEE-SDK\demo"目录下"build-demo.bat"文件，会在"build"目录下自动生成vs项目文件，并自动在vs2019中打开"indemind_demos.sln"
-2. 在vs2019中选择"Release"版本，点击"生成"->"生成解决方案"，开始编译demo。生成的文件在"IMSEE-SDK\demo\output\bin"下。
+2. vs2019编译"IMSEE-SDK\demo"
+    1. 双击"IMSEE-SDK\demo"目录下"build-demo.bat"文件，会在"build"目录下自动生成vs项目文件，并自动在vs2019中打开"indemind_demos.sln"
+    2. 在vs2019中选择"Release"版本，点击"生成"->"生成解决方案"，开始编译demo。生成的文件在"IMSEE-SDK\demo\output\bin"下。
 
-三、运行demo
-1. 将双目驱动"Driver_Win64-master\lib"下的"usbdriver.dll"和"windriver.dll"拷贝到"IMSEE-SDK\demo\output\bin"
-2. 双击运行"IMSEE-SDK\demo"下的"build-demo.bat"
+3. 运行demo
+    1. 双击运行"IMSEE-SDK\demo"下的"build-demo.bat"
 
 
 ### 样例介绍
