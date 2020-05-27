@@ -131,7 +131,7 @@ sudo ./demo/output/bin/get_image # 运行样例需要用权限
     5. 在vs2019中选择"Release"版本，点击"生成"->"生成解决方案"，开始编译opencv。
     生成的文件在"opencv构建目录\bin\Release"下。
     6. 将"opencv构建目录\bin\Release"添加到环境变量"PATH"。例如："D:\\...\opencv331\opencv\build-win10-x64-vs19\bin\Release"。
-    7. 新建系统变量"OpenCV_DIR"，值为"opencv构建目录"。例如："D:\\CLanguage\OpenSourse\OpenCV\opencv331\opencv\build-win10-x64-vs19"。
+    7. 新建系统变量"OpenCV_DIR"，值为"opencv构建目录"。例如："D:\\...\opencv331\opencv\build-win10-x64-vs19"。
 
 2. vs2019编译"IMSEE-SDK\demo"
     1. 双击"IMSEE-SDK\demo"目录下"build-demo.bat"文件，会在"build"目录下自动生成vs项目文件，并自动在vs2019中打开"indemind_demos.sln"
