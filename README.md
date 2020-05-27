@@ -138,7 +138,7 @@ sudo ./demo/output/bin/get_image # 运行样例需要用权限
     2. 在vs2019中选择"Release"版本，点击"生成"->"生成解决方案"，开始编译demo。生成的文件在"IMSEE-SDK\demo\output\bin"下。
 
 3. 运行demo
-    1. 双击运行"IMSEE-SDK\demo"下的"build-demo.bat"
+    1. 转到目录"IMSEE-SDK\demo\output\bin"，运行目录下的各个demo
 
 
 #### 样例介绍
