@@ -11,15 +11,15 @@ mkdir %buildOutputFile%
 )
 
 cd %buildOutputFile%
-
-echo start... "call cmake ."
-call cmake ..\.
 echo.
 
-echo %cd%
+echo start... "call cmake ."
+call cmake-gui ..\.
+echo.
 
-echo .\indemind_demos.sln
+echo %cd%\indemind_demos.sln
 start .\indemind_demos.sln
+echo.
 
 cd ..
 copy %cd%\..\src\detector\lib\win10-x64\MNN.dll %cd%\output\bin\MNN.dll
