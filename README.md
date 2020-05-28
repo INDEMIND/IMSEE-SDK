@@ -140,7 +140,7 @@ sudo ./demo/output/bin/get_image # 运行样例需要用权限
 2. vs2019编译"IMSEE-SDK\demo"
     1. 双击文件"IMSEE-SDK\demo\build-demo.bat"，会自动打开"cmake-gui.exe"。注意："build-demo.bat"会自动关闭，不要手动关闭。
     2. 点击"Configure"按钮，选择编译工具为"Visual Studio 16 2019"，选择编译目标平台为"x64"。
-        点击"Finish"按钮，此时CMake进行第一次编译配置。
+        点击"Finish"按钮，此时CMake进行编译配置。
 	3. "Configuring done"后，点击"Generate"按钮，进行win项目生成。
 	4. "Generating done"后，关闭"cmake-gui.exe"。脚本自动用vs2019打开"build/indemind_demos.sln"。
 	5. 在vs2019中选择"Release"版本，点击"生成"->"生成解决方案"，开始编译demo。生成的文件在"IMSEE-SDK\demo\output\bin"下。
