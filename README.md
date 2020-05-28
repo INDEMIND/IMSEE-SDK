@@ -117,11 +117,11 @@ sudo ./demo/output/bin/get_image # 运行样例需要用权限
 3. [opencv3.3.1](https://sourceforge.net/projects/opencvlibrary/files/opencv-win/3.3.1/opencv-3.3.1-vc14.exe/download)
 4. IMSEE-SDK(双目SDK)
 
-**软件配置**
-1. CMake将bin目录添加到系统环境变量"PATH"中。
+**配置准备**
+1. 将CMake下bin目录路径添加到系统环境变量"PATH"中。
 2. 设置后缀格式为"sln"的项目文件的默认打开方式为"Microsoft Visual Studio 2019"。
 
-**步骤**
+**编译步骤**
 1. vs2019编译opencv3.3.1
     1. 双击"opencv-3.3.1-vc14.exe"，解压文件到指定目录下。例如解压目录为："D:\\...\opencv331"。
     2. 启动CMake，在"Where is the source code"中输入opencv源码路径。例如："D:\\...\opencv331\opencv\sources";
