@@ -25,22 +25,22 @@ MNN_LIB_BASE_DIR=$DETECTOR_BASE_DIR/lib
 HOST_ARCH=$(uname -m)
 # echo "Host arch is $HOST_ARCH"
 
-if [ "$HOST_ARCH" = "x86_64" ]; then
-  DRIVER_DIR=$DRIVER_BASE_DIR/x86-64
-  MNN_LIB_DIR=$MNN_LIB_BASE_DIR/x86-64
-elif [ "$HOST_ARCH" = "aarch64" ]; then
-  DRIVER_DIR=$DRIVER_BASE_DIR/aarch64
-  MNN_LIB_DIR=$MNN_LIB_BASE_DIR/aarch64
-else
-  echo "Unknown host arch :("
-  exit 1
-fi
+# if [ "$HOST_ARCH" = "x86_64" ]; then
+#   DRIVER_DIR=$DRIVER_BASE_DIR/x86-64
+#   MNN_LIB_DIR=$MNN_LIB_BASE_DIR/x86-64
+# elif [ "$HOST_ARCH" = "aarch64" ]; then
+#   DRIVER_DIR=$DRIVER_BASE_DIR/aarch64
+#   MNN_LIB_DIR=$MNN_LIB_BASE_DIR/aarch64
+# else
+#   echo "Unknown host arch :("
+#   exit 1
+# fi
 
 # creat link
-if [ ! -f "$WRAPPER_OUTPUT_DIR/libusbdriver.so" ]; then
-  ln -s $DRIVER_DIR/libusbdriver.so $WRAPPER_OUTPUT_DIR
-  echo "Finish cp libusbdriver.so!"
-fi
+# if [ ! -f "$WRAPPER_OUTPUT_DIR/libusbdriver.so" ]; then
+#   ln -s $DRIVER_DIR/libusbdriver.so $WRAPPER_OUTPUT_DIR
+#   echo "Finish cp libusbdriver.so!"
+# fi
 
 if [ ! -f "$WRAPPER_OUTPUT_DIR/libMNN.so" ]; then
   ln -s $MNN_LIB_DIR/libMNN.so $WRAPPER_OUTPUT_DIR

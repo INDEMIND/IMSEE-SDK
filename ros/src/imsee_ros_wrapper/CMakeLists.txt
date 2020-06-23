@@ -68,10 +68,10 @@ catkin_package(
 )
 
 if(OS_UBUNTU)
-  set(MNN_LIB_DIR ${SDK_DIR}/src/detector/lib/x86-64)
+  # set(MNN_LIB_DIR ${SDK_DIR}/src/detector/lib/x86-64)
   set(INDEMIND_LIB_DIR ${SDK_DIR}/lib/x86-64)
 else()
-  set(MNN_LIB_DIR ${SDK_DIR}/src/detector/lib/aarch64)
+  # set(MNN_LIB_DIR ${SDK_DIR}/src/detector/lib/aarch64)
   set(INDEMIND_LIB_DIR ${SDK_DIR}/lib/aarch64)
 endif ()
 
@@ -95,7 +95,7 @@ set(LINK_LIBS
   ${catkin_LIBRARIES}
   ${OpenCV_LIBS}
   ${INDEMIND_LIB_DIR}/libindemind.so
-  ${MNN_LIB_DIR}/libMNN.so
+  # ${MNN_LIB_DIR}/libMNN.so
 )
 
 add_library(imsee_wrapper src/wrapper_nodelet.cc)

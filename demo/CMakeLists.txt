@@ -46,13 +46,13 @@ message(STATUS "C_FLAGS: ${CMAKE_C_FLAGS}")
 message(STATUS "CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 
 if(OS_UBUNTU)
-  set(MNN_LIB_DIR ${PRO_DIR}/src/detector/lib/x86-64)
+  #set(MNN_LIB_DIR ${PRO_DIR}/src/detector/lib/x86-64)
   set(INDEMIND_LIB_DIR ${PRO_DIR}/lib/x86-64)
 elseif(Firefly)
-  set(MNN_LIB_DIR ${PRO_DIR}/src/detector/lib/aarch64)
+  #set(MNN_LIB_DIR ${PRO_DIR}/src/detector/lib/aarch64)
   set(INDEMIND_LIB_DIR ${PRO_DIR}/lib/aarch64)
 else (OS_WIN)
-  set(MNN_LIB_DIR ${PRO_DIR}/src/detector/lib/win10-x64)
+  #set(MNN_LIB_DIR ${PRO_DIR}/src/detector/lib/win10-x64)
   set(INDEMIND_LIB_DIR ${PRO_DIR}/lib/win10-x64)
 endif ()
 
@@ -124,12 +124,12 @@ endif()
 add_executable(${NAME} ${THIS_SRCS})
 IF(WIN32)
 target_link_libraries(${NAME}
-${MNN_LIB_DIR}/MNN.lib
+# ${MNN_LIB_DIR}/MNN.lib
 ${__link_libs}
 )
 ELSE(WIN32)
 target_link_libraries(${NAME}
-${MNN_LIB_DIR}/libMNN.so
+# ${MNN_LIB_DIR}/libMNN.so
 ${__link_libs}
 pthread
 )
