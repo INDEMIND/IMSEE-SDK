@@ -25,6 +25,11 @@
 #endif
 using namespace indem;
 
+template <typename T> void clear(std::queue<T> &q) {
+  std::queue<T> empty;
+  swap(empty, q);
+}
+
 std::string GetRoot() {
   char szPath[PATH_MAX] = {0};
 #ifdef WIN32
@@ -46,7 +51,7 @@ std::string GetRoot() {
 }
 
 int main(int argc, char **argv) {
-  CIMRSDK *m_pSDK = new CIMRSDK();
+  auto m_pSDK = new CIMRSDK();
   MRCONFIG config = {0};
   config.bSlam = false;
   config.imgResolution = IMG_640;
@@ -111,7 +116,7 @@ int main(int argc, char **argv) {
   while (true) {
     if (!image_queue.empty()) {
       cv::imshow("image", image_queue.front());
-      image_queue.pop();
+      clear(image_queue);
     }
     char key = static_cast<char>(cv::waitKey(1));
     if (key == 27 || key == 'q' || key == 'Q') { // ESC/Q

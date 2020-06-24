@@ -20,8 +20,13 @@
 
 using namespace indem;
 
+template <typename T> void clear(std::queue<T> &q) {
+  std::queue<T> empty;
+  swap(empty, q);
+}
+
 int main(int argc, char **argv) {
-  CIMRSDK *m_pSDK = new CIMRSDK();
+  auto m_pSDK = new CIMRSDK();
   MRCONFIG config = {0};
   config.bSlam = false;
   config.imgResolution = IMG_640;
@@ -45,7 +50,7 @@ int main(int argc, char **argv) {
   while (true) {
     if (!depth_queue.empty()) {
       cv::imshow("depth", depth_queue.front());
-      depth_queue.pop();
+      clear(depth_queue);
     }
     char key = static_cast<char>(cv::waitKey(1));
     if (key == 27 || key == 'q' || key == 'Q') { // ESC/Q
@@ -53,7 +58,6 @@ int main(int argc, char **argv) {
     }
   }
   delete m_pSDK;
-
   auto &&time_end = times::now();
 
   float elapsed_ms =

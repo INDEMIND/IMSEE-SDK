@@ -139,32 +139,35 @@ struct ImuData {
 };
 
 struct CameraParameter {
-  double _TSC[16]; // 4X4 camera to imu
+  double _TSC[16]; //
+  /* 4X4 matrix from camera to imu */
   int _width;
+  /* width */
   int _height;
-
-  // distortion_type:equidistant
-  double _focal_length[2];    // fx,fy
-  double _principal_point[2]; // cx,cy
-  // Rectification matrix (stereo cameras only)
-  // A rotation matrix aligning the camera coordinate system to the ideal
-  // stereo image plane so that epipolar lines in both stereo images are
-  // parallel.
+  /* height */
+  double _focal_length[2];
+  /* fx,fy */
+  double _principal_point[2];
+  /* cx,cy */
   double _R[9];
-  // Projection/camera matrix
-  //     [fx'  0  cx' Tx]
-  // P = [ 0  fy' cy' Ty]
-  //     [ 0   0   1   0]
-  double _P[12];
-  // Intrinsic camera matrix for the raw (distorted) images.
-  //     [fx  0 cx]
-  // K = [ 0 fy cy]
-  //     [ 0  0  1]
-  double _K[9];
-  // The distortion parameters, size depending on the distortion model.
-  // For us, the 4 parameters are: (k1, k2, t1, t2).
-  double _D[4];
+  /* Rectification matrix (stereo cameras only)
+     A rotation matrix aligning the camera coordinate system to the ideal
+     stereo image plane so that epipolar lines in both stereo images are
+     parallel. */
 
+  double _P[12];
+  /* Projection/camera matrix
+         [fx'  0  cx' Tx]
+     P = [ 0  fy' cy' Ty]
+         [ 0   0   1   0] */
+  double _K[9];
+  /* Intrinsic camera matrix for the raw (distorted) images.
+         [fx  0 cx]
+     K = [ 0 fy cy]
+         [ 0  0  1] */
+  double _D[4];
+  /* The distortion parameters, size depending on the distortion model.
+     For us, the 4 parameters are: (k1, k2, t1, t2).*/
   CameraParameter resize(double ratio) const {
     CameraParameter parameter;
     parameter = *this;
@@ -194,75 +197,209 @@ struct CameraParameter {
       std::cout << "_principal_point[" << i << "]: " << _principal_point[i]
                 << std::endl;
     }
+    std::cout << "_focal_length: { ";
+    for (int i = 0; i < 2; i++) {
+      std::cout << _focal_length[i] << " ";
+    }
+    std::cout << "} " << std::endl;
+    std::cout << "_principal_point: { ";
+    for (int i = 0; i < 2; i++) {
+      std::cout << _principal_point[i] << " ";
+    }
+    std::cout << "} " << std::endl;
+    std::cout << "_TSC: { ";
     for (int i = 0; i < 16; i++) {
-      std::cout << "_TSC[" << i << "]: " << _TSC[i] << std::endl;
+      std::cout << _TSC[i] << " ";
     }
+    std::cout << "} " << std::endl;
+    std::cout << "_R: { ";
     for (int i = 0; i < 9; i++) {
-      std::cout << "_R[" << i << "]: " << _R[i] << std::endl;
-      std::cout << "_K[" << i << "]: " << _K[i] << std::endl;
+      std::cout << _R[i] << " ";
     }
+    std::cout << "} " << std::endl;
+    std::cout << "_P: { ";
     for (int i = 0; i < 12; i++) {
-      std::cout << "_P[" << i << "]: " << _P[i] << std::endl;
+      std::cout << _P[i] << " ";
     }
+    std::cout << "} " << std::endl;
+    std::cout << "_K: { ";
+    for (int i = 0; i < 9; i++) {
+      std::cout << _K[i] << " ";
+    }
+    std::cout << "} " << std::endl;
+    std::cout << "_D: { ";
+    for (int i = 0; i < 4; i++) {
+      std::cout << _D[i] << " ";
+    }
+    std::cout << "} " << std::endl;
   }
 };
 // IMU 参数
 struct IMUParameter {
   double _a_max;
+  /* a_max */
   double _g_max;
+  /* g_max */
   double _sigma_g_c;
+  /* sigma_g_c */
   double _sigma_a_c;
+  /* sigma_a_c */
   double _sigma_bg;
+  /* sigma_bg */
   double _sigma_ba;
+  /* sigma_ba */
   double _sigma_gw_c;
+  /* sigma_gw_c */
   double _sigma_aw_c;
+  /* sigma_aw_c */
   double _tau;
+  /* tau */
   double _g;
+  /* g */
   double _a0[4];
+  /* a0 */
   double _T_BS[16];
-  double _Acc[12]; //加速度计的补偿参数
-  double _Gyr[12]; //陀螺仪的补偿参数
+  /* T_BS */
+  double _Acc[12];
+  /* Compensation parameters of accelerometer */
+  double _Gyr[12];
+  /* Compensation parameters of gyroscope */
+  void printInfo() {
+    std::cout << "_a_max: " << _a_max << std::endl
+              << "_g_max: " << _g_max << std::endl
+              << "_sigma_g_c: " << _sigma_g_c << std::endl
+              << "_sigma_a_c: " << _sigma_a_c << std::endl
+              << "_sigma_bg: " << _sigma_bg << std::endl
+              << "_sigma_ba: " << _sigma_ba << std::endl
+              << "_sigma_gw_c: " << _sigma_gw_c << std::endl
+              << "_sigma_aw_c: " << _sigma_aw_c << std::endl
+              << "_tau: " << _tau << std::endl
+              << "_g: " << _g << std::endl;
+    std::cout << "_a0: { ";
+    for (int i = 0; i < 4; i++) {
+      std::cout << _a0[i] << " ";
+    }
+    std::cout << "} " << std::endl;
+    std::cout << "_T_BS: { ";
+    for (int i = 0; i < 16; i++) {
+      std::cout << _T_BS[i] << " ";
+    }
+    std::cout << "} " << std::endl;
+    std::cout << "_Acc: { ";
+    for (int i = 0; i < 12; i++) {
+      std::cout << _Acc[i] << " ";
+    }
+    std::cout << "} " << std::endl;
+    std::cout << "_Gyr: { ";
+    for (int i = 0; i < 12; i++) {
+      std::cout << _Gyr[i] << " ";
+    }
+    std::cout << "} " << std::endl;
+  }
 };
 
 struct ModuleInfo {
   char _id[32];
+  /* id */
   char _designer[32];
+  /* designer */
   char _fireware_version[32];
+  /* fireware version */
   char _hardware_version[32];
+  /* _hardware version */
   char _lens[32];
+  /* lens */
   char _imu[32];
+  /* imu */
   char _viewing_angle[32];
+  /* viewing angle */
   char _baseline[32];
+  /* baseline */
+  void printInfo() {
+    std::cout << "id: ";
+    for (int i = 0; i < 32; i++) {
+      std::cout << _id[i];
+    }
+    std::cout << std::endl << "designer: ";
+    for (int i = 0; i < 32; i++) {
+      std::cout << _designer[i];
+    }
+    std::cout << std::endl << "fireware_version: ";
+    for (int i = 0; i < 32; i++) {
+      std::cout << _fireware_version[i];
+    }
+    std::cout << std::endl << "hardware_version: ";
+    for (int i = 0; i < 32; i++) {
+      std::cout << _hardware_version[i];
+    }
+    std::cout << std::endl << "lens: ";
+    for (int i = 0; i < 32; i++) {
+      std::cout << _lens[i];
+    }
+    std::cout << std::endl << "imu: ";
+    for (int i = 0; i < 32; i++) {
+      std::cout << _imu[i];
+    }
+    std::cout << std::endl << "viewing_angle: ";
+    for (int i = 0; i < 32; i++) {
+      std::cout << _viewing_angle[i];
+    }
+    std::cout << std::endl << "_baseline: ";
+    for (int i = 0; i < 32; i++) {
+      std::cout << _baseline[i];
+    }
+    std::cout << std::endl;
+  }
 };
 
 struct SlamParameter {
-  int _numKeyframes;            //关键帧数量 =5
-  int _numImuFrames;            //相邻imu帧数量 =3
-  int _ceres_minIterations;     //最小优化次数 =3
-  int _ceres_maxIterations;     //最大优化次数 =4
-  double _ceres_timeLimit;      //=3.5000000000000003e-02
-  int detection_threshold;      //角点阈值 =30
-  int detection_octaves;        //=0
-  int detection_maxNoKeypoints; //最大角点数量    = 100
-  bool displayImages;           //是否显示slam界面  = true
+  int _numKeyframes;
+  /* 关键帧数量(默认为５) */
+  int _numImuFrames;
+  /* 相邻imu帧数量(默认为３) */
+  int _ceres_minIterations;
+  /* 最小优化次数(默认为３) */
+  int _ceres_maxIterations;
+  /* 最大优化次数(默认为４) */
+  double _ceres_timeLimit;
+  /* ceres　time　limit(默认为3.5000000000000003e-02) */
+  int detection_threshold;
+  /* 角点阈值(默认为30) */
+  int detection_octaves;
+  /* detection octaves(默认为0) */
+  int detection_maxNoKeypoints;
+  /* 最大角点数量(默认为100) */
+  bool displayImages;
+  /* 是否显示slam界面(默认为true) */
 };
 
 // TODO: Replace 'ModuleParameters' at all
 struct MoudleAllParam {
   std::map<RESOLUTION, CameraParameter> _left_camera;
+  /* CameraParameter of left cameras */
   std::map<RESOLUTION, CameraParameter> _right_camera;
+  /* CameraParameter of right cameras */
   int _camera_channel = 1; // TODO: Put this parameter in 'CameraParameter'
+  /* camera channel */
   double _baseline = 0.12; // TODO: Put this parameter in 'CameraParameter'
+  /* baseline */
   IMUParameter _imu;
+  /* IMU parameter */
   ModuleInfo _device;
+  /* device info */
   SlamParameter _slam;
+  /* slam parameter */
 };
 
 struct ModuleParameters {
   CameraParameter _camera[2]; //左右目相机
+  /* CameraParameter of cameras */
   IMUParameter _imu;
+  /* IMU parameter */
   ModuleInfo _device;
+  /* device info */
   SlamParameter _slam;
+  /* slam parameter */
 };
 
 // detector
@@ -281,60 +418,66 @@ enum CLASS_NAME {
 
 struct BoxInfo {
   cv::Rect box;
+  /* box */
   float score;
+  /* reliability score */
   float cx;
+  /* cx */
   float cy;
-  // in some case, float type is needed
+  /* cy */
   float width;
+  /* width */
   float height;
-
-  // class
+  /* height */
   CLASS_NAME class_name;
-
-  // used for record its position
+  /* class */
   int index;
+  /* used for record its position */
 };
 
 struct InstanceInfo {
-  // class
   CLASS_NAME class_name;
-
-  // instance
+  /* class */
   int instance_id;
-
-  // xyz
+  /* instance id */
   float location[3];
-  // camera coords
+  /* location:xyz*/
   float location_cam[3];
-
-  // time
+  /* camera coords */
   float time;
-
-  // scale
+  /* time */
   float scale;
-
-  // used calc iou in image
+  /* scale */
   cv::Rect box;
-
+  /* box */
   int _count;
+  /* count */
   float front_face_points[3][3];
+  /* front face points */
   float rear_face_points[3][3];
+  /* rear face points */
   bool visible;
-
+  /* visible */
   int class_count = 0;
-
+  /* class count */
   bool valid;
-
+  /* valid */
   // calc from location instead of center of box
   float cx;
+  /* cx */
   float cy;
+  /* cy */
   float depth;
+  /* depth */
 };
 
 struct DetectorInfo {
   double timestamp;
+  /* time stamp */
   cv::Mat img;
+  /* mat of image */
   std::vector<BoxInfo> finalBoxInfo;
+  /* vector of boxinfo */
 };
 
 #define MODULE_SIZE sizeof(ModuleParameters)
