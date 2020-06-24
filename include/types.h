@@ -140,33 +140,33 @@ struct ImuData {
 
 struct CameraParameter {
   double _TSC[16]; //
-  /* 4X4 matrix from camera to imu */
+  /** 4X4 matrix from camera to imu */
   int _width;
-  /* width */
+  /** width */
   int _height;
-  /* height */
+  /** height */
   double _focal_length[2];
-  /* fx,fy */
+  /** fx,fy */
   double _principal_point[2];
-  /* cx,cy */
+  /** cx,cy */
   double _R[9];
-  /* Rectification matrix (stereo cameras only)
+  /** Rectification matrix (stereo cameras only)
      A rotation matrix aligning the camera coordinate system to the ideal
      stereo image plane so that epipolar lines in both stereo images are
      parallel. */
 
   double _P[12];
-  /* Projection/camera matrix
+  /** Projection/camera matrix
          [fx'  0  cx' Tx]
      P = [ 0  fy' cy' Ty]
          [ 0   0   1   0] */
   double _K[9];
-  /* Intrinsic camera matrix for the raw (distorted) images.
+  /** Intrinsic camera matrix for the raw (distorted) images.
          [fx  0 cx]
      K = [ 0 fy cy]
          [ 0  0  1] */
   double _D[4];
-  /* The distortion parameters, size depending on the distortion model.
+  /** The distortion parameters, size depending on the distortion model.
      For us, the 4 parameters are: (k1, k2, t1, t2).*/
   CameraParameter resize(double ratio) const {
     CameraParameter parameter;
@@ -237,33 +237,33 @@ struct CameraParameter {
 // IMU 参数
 struct IMUParameter {
   double _a_max;
-  /* a_max */
+  /** a_max */
   double _g_max;
-  /* g_max */
+  /** g_max */
   double _sigma_g_c;
-  /* sigma_g_c */
+  /** sigma_g_c */
   double _sigma_a_c;
-  /* sigma_a_c */
+  /** sigma_a_c */
   double _sigma_bg;
-  /* sigma_bg */
+  /** sigma_bg */
   double _sigma_ba;
-  /* sigma_ba */
+  /** sigma_ba */
   double _sigma_gw_c;
-  /* sigma_gw_c */
+  /** sigma_gw_c */
   double _sigma_aw_c;
-  /* sigma_aw_c */
+  /** sigma_aw_c */
   double _tau;
-  /* tau */
+  /** tau */
   double _g;
-  /* g */
+  /** g */
   double _a0[4];
-  /* a0 */
+  /** a0 */
   double _T_BS[16];
-  /* T_BS */
+  /** T_BS */
   double _Acc[12];
-  /* Compensation parameters of accelerometer */
+  /** Compensation parameters of accelerometer */
   double _Gyr[12];
-  /* Compensation parameters of gyroscope */
+  /** Compensation parameters of gyroscope */
   void printInfo() {
     std::cout << "_a_max: " << _a_max << std::endl
               << "_g_max: " << _g_max << std::endl
@@ -300,21 +300,21 @@ struct IMUParameter {
 
 struct ModuleInfo {
   char _id[32];
-  /* id */
+  /** id */
   char _designer[32];
-  /* designer */
+  /** designer */
   char _fireware_version[32];
-  /* fireware version */
+  /** fireware version */
   char _hardware_version[32];
-  /* _hardware version */
+  /** _hardware version */
   char _lens[32];
-  /* lens */
+  /** lens */
   char _imu[32];
-  /* imu */
+  /** imu */
   char _viewing_angle[32];
-  /* viewing angle */
+  /** viewing angle */
   char _baseline[32];
-  /* baseline */
+  /** baseline */
   void printInfo() {
     std::cout << "id: ";
     for (int i = 0; i < 32; i++) {
@@ -354,52 +354,52 @@ struct ModuleInfo {
 
 struct SlamParameter {
   int _numKeyframes;
-  /* 关键帧数量(默认为５) */
+  /** 关键帧数量(默认为５) */
   int _numImuFrames;
-  /* 相邻imu帧数量(默认为３) */
+  /** 相邻imu帧数量(默认为３) */
   int _ceres_minIterations;
-  /* 最小优化次数(默认为３) */
+  /** 最小优化次数(默认为３) */
   int _ceres_maxIterations;
-  /* 最大优化次数(默认为４) */
+  /** 最大优化次数(默认为４) */
   double _ceres_timeLimit;
-  /* ceres　time　limit(默认为3.5000000000000003e-02) */
+  /** ceres　time　limit(默认为3.5000000000000003e-02) */
   int detection_threshold;
-  /* 角点阈值(默认为30) */
+  /** 角点阈值(默认为30) */
   int detection_octaves;
-  /* detection octaves(默认为0) */
+  /** detection octaves(默认为0) */
   int detection_maxNoKeypoints;
-  /* 最大角点数量(默认为100) */
+  /** 最大角点数量(默认为100) */
   bool displayImages;
-  /* 是否显示slam界面(默认为true) */
+  /** 是否显示slam界面(默认为true) */
 };
 
 // TODO: Replace 'ModuleParameters' at all
 struct MoudleAllParam {
   std::map<RESOLUTION, CameraParameter> _left_camera;
-  /* CameraParameter of left cameras */
+  /** CameraParameter of left cameras */
   std::map<RESOLUTION, CameraParameter> _right_camera;
-  /* CameraParameter of right cameras */
+  /** CameraParameter of right cameras */
   int _camera_channel = 1; // TODO: Put this parameter in 'CameraParameter'
-  /* camera channel */
+  /** camera channel */
   double _baseline = 0.12; // TODO: Put this parameter in 'CameraParameter'
-  /* baseline */
+  /** baseline */
   IMUParameter _imu;
-  /* IMU parameter */
+  /** IMU parameter */
   ModuleInfo _device;
-  /* device info */
+  /** device info */
   SlamParameter _slam;
-  /* slam parameter */
+  /** slam parameter */
 };
 
 struct ModuleParameters {
   CameraParameter _camera[2]; //左右目相机
-  /* CameraParameter of cameras */
+  /** CameraParameter of cameras */
   IMUParameter _imu;
-  /* IMU parameter */
+  /** IMU parameter */
   ModuleInfo _device;
-  /* device info */
+  /** device info */
   SlamParameter _slam;
-  /* slam parameter */
+  /** slam parameter */
 };
 
 // detector
@@ -418,66 +418,66 @@ enum CLASS_NAME {
 
 struct BoxInfo {
   cv::Rect box;
-  /* box */
+  /** box */
   float score;
-  /* reliability score */
+  /** reliability score */
   float cx;
-  /* cx */
+  /** cx */
   float cy;
-  /* cy */
+  /** cy */
   float width;
-  /* width */
+  /** width */
   float height;
-  /* height */
+  /** height */
   CLASS_NAME class_name;
-  /* class */
+  /** class */
   int index;
-  /* used for record its position */
+  /** used for record its position */
 };
 
 struct InstanceInfo {
   CLASS_NAME class_name;
-  /* class */
+  /** class */
   int instance_id;
-  /* instance id */
+  /** instance id */
   float location[3];
-  /* location:xyz*/
+  /** location:xyz*/
   float location_cam[3];
-  /* camera coords */
+  /** camera coords */
   float time;
-  /* time */
+  /** time */
   float scale;
-  /* scale */
+  /** scale */
   cv::Rect box;
-  /* box */
+  /** box */
   int _count;
-  /* count */
+  /** count */
   float front_face_points[3][3];
-  /* front face points */
+  /** front face points */
   float rear_face_points[3][3];
-  /* rear face points */
+  /** rear face points */
   bool visible;
-  /* visible */
+  /** visible */
   int class_count = 0;
-  /* class count */
+  /** class count */
   bool valid;
-  /* valid */
+  /** valid */
   // calc from location instead of center of box
   float cx;
-  /* cx */
+  /** cx */
   float cy;
-  /* cy */
+  /** cy */
   float depth;
-  /* depth */
+  /** depth */
 };
 
 struct DetectorInfo {
   double timestamp;
-  /* time stamp */
+  /** time stamp */
   cv::Mat img;
-  /* mat of image */
+  /** mat of image */
   std::vector<BoxInfo> finalBoxInfo;
-  /* vector of boxinfo */
+  /** vector of boxinfo */
 };
 
 #define MODULE_SIZE sizeof(ModuleParameters)
