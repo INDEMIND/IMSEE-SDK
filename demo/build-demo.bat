@@ -23,10 +23,8 @@ echo.
 
 cd ..
 copy %cd%\..\src\detector\lib\win10-x64\MNN.dll %cd%\output\bin\MNN.dll
-copy %cd%\..\lib\win10-x64\indemind.dll %cd%\output\bin\indemind.dll
+copy %cd%\..\lib\others\win10-x64-vs15-opencv3.4.3\indemind.dll %cd%\output\bin\indemind.dll
 copy %cd%\..\src\detector\config\blazeface.mnn %cd%\output\bin\blazeface.mnn
-copy %cd%\..\src\driver\lib\win64\usbdriver.dll %cd%\output\bin\usbdriver.dll
-copy %cd%\..\src\driver\lib\win64\windriver.dll %cd%\output\bin\windriver.dll
 
 ::pause
 exit
