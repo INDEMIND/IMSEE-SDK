@@ -17,7 +17,7 @@
 #include "times.h"
 #include "types.h"
 #include <queue>
-
+#include <mutex>
 using namespace indem;
 
 template <typename T> void clear(std::queue<T> &q) {
@@ -35,6 +35,7 @@ int main(int argc, char **argv) {
 
   m_pSDK->Init(config);
   std::queue<cv::Mat> detector_queue;
+  std::mutex mutex_detector;
   int detector_count = 0;
   std::string name[10] = {
       "BG",    "PERSON", "PET_CAT",   "PET_DOG", "SOFA",
@@ -42,9 +43,12 @@ int main(int argc, char **argv) {
   };
   m_pSDK->EnableDetectorProcessor();
   m_pSDK->RegistDetectorCallback(
-      [&detector_count, &detector_queue, &name](DetectorInfo info) {
+      [&detector_count, &detector_queue, &name, &mutex_detector](DetectorInfo info) {
         if (!info.img.empty()) {
-          detector_queue.push(info.img);
+            {
+                std::unique_lock<std::mutex> lock(mutex_detector);
+                detector_queue.push(info.img);
+            }
           ++detector_count;
           for (int i = 0; i < info.finalBoxInfo.size(); ++i) {
             BoxInfo &obj = info.finalBoxInfo[i];
@@ -59,6 +63,7 @@ int main(int argc, char **argv) {
   auto &&time_beg = times::now();
   while (true) {
     if (!detector_queue.empty()) {
+      std::unique_lock<std::mutex> lock(mutex_detector);
       cv::imshow("detector", detector_queue.front());
       clear(detector_queue);
     }

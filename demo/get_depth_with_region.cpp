@@ -19,7 +19,7 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/opencv.hpp>
 #include <queue>
-
+#include <mutex>
 using namespace indem;
 
 static cv::Mat cv_in_left, cv_in_left_inv;
@@ -186,22 +186,30 @@ int main(int argc, char **argv) {
     return os.str();
   };
   std::queue<cv::Mat> disparity_queue, depth_queue;
+  std::mutex mutex_depth;
+  std::mutex mutex_disparity;
   if (m_pSDK->EnableDepthProcessor()) {
-    m_pSDK->RegistDepthCallback([&depth_queue](double time, cv::Mat depth) {
+    m_pSDK->RegistDepthCallback([&depth_queue, &mutex_depth](double time, cv::Mat depth) {
       if (!depth.empty()) {
         depth.convertTo(depth, CV_16U, 1000.0);
-        depth_queue.push(depth);
+        {
+            std::unique_lock<std::mutex> lock(mutex_depth);
+            depth_queue.push(depth);
+        }
       }
     });
   }
   if (m_pSDK->EnableDisparityProcessor()) {
     m_pSDK->RegistDisparityCallback(
-        [&disparity_queue](double time, cv::Mat disparity) {
+        [&disparity_queue, &mutex_disparity](double time, cv::Mat disparity) {
           if (!disparity.empty()) {
             disparity.convertTo(disparity, CV_8U, 255. / (16 * 64));
             cv::applyColorMap(disparity, disparity, cv::COLORMAP_JET);
             disparity.setTo(0, disparity == -16);
-            disparity_queue.push(disparity);
+            {
+                std::unique_lock<std::mutex> lock(mutex_disparity);
+                disparity_queue.push(disparity);
+            }
           }
         });
   }
@@ -209,21 +217,27 @@ int main(int argc, char **argv) {
   while (true) {
     if (!depth_queue.empty() && !disparity_queue.empty()) {
       cv::namedWindow("depth");
-      cv::imshow("depth", disparity_queue.front());
+      {
+        std::unique_lock<std::mutex> lock(mutex_disparity);
+        cv::imshow("depth", disparity_queue.front());
+        clear(disparity_queue);
+      }
       cv::setMouseCallback("depth", OnDepthMouseCallback, &depth_region);
       // Note: DrawRect will change some depth values to show the rect.
-      depth_region.DrawRect(depth_queue.front());
-      depth_region.ShowElems<ushort>(
-          depth_queue.front(),
-          [](const ushort &elem) {
+      {
+        std::unique_lock<std::mutex> lock(mutex_depth);
+        depth_region.DrawRect(depth_queue.front());
+        depth_region.ShowElems<ushort>(
+            depth_queue.front(),
+            [](const ushort &elem) {
             if (elem >= 10000) {
-              return std::string("invalid");
+                return std::string("invalid");
             }
             return std::to_string(elem);
-          },
-          90, depth_info);
-      clear(disparity_queue);
-      clear(depth_queue);
+            },
+            90, depth_info);
+        clear(depth_queue);
+      }
     }
     char key = static_cast<char>(cv::waitKey(1));
     if (key == 27 || key == 'q' || key == 'Q') { // ESC/Q

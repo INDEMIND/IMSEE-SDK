@@ -17,7 +17,7 @@
 #include "times.h"
 #include "types.h"
 #include <queue>
-
+#include <mutex>
 using namespace indem;
 
 template <typename T> void clear(std::queue<T> &q) {
@@ -35,13 +35,17 @@ int main(int argc, char **argv) {
 
   m_pSDK->Init(config);
   std::queue<cv::Mat> depth_queue;
+  std::mutex mutex_depth;
   int depth_count = 0;
   if (m_pSDK->EnableDepthProcessor()) {
     m_pSDK->RegistDepthCallback(
-        [&depth_count, &depth_queue](double time, cv::Mat depth) {
+        [&depth_count, &depth_queue, &mutex_depth](double time, cv::Mat depth) {
           if (!depth.empty()) {
             depth.convertTo(depth, CV_16U, 1000.0);
-            depth_queue.push(depth);
+            {
+                std::unique_lock<std::mutex> u_lock(mutex_depth);
+                depth_queue.push(depth);
+            }
             ++depth_count;
           }
         });
@@ -49,6 +53,7 @@ int main(int argc, char **argv) {
   auto &&time_beg = times::now();
   while (true) {
     if (!depth_queue.empty()) {
+      std::unique_lock<std::mutex> u_lock(mutex_depth);
       cv::imshow("depth", depth_queue.front());
       clear(depth_queue);
     }

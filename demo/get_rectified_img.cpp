@@ -17,7 +17,7 @@
 #include "times.h"
 #include "types.h"
 #include <queue>
-
+#include <mutex>
 using namespace indem;
 
 template <typename T> void clear(std::queue<T> &q) {
@@ -35,15 +35,19 @@ int main(int argc, char **argv) {
 
   m_pSDK->Init(config);
   std::queue<cv::Mat> rectified_queue;
+  std::mutex mutex_rectified;
   int rectified_img_count = 0;
   if (m_pSDK->EnableRectifyProcessor()) {
     m_pSDK->RegistRectifiedImgCallback(
-        [&rectified_img_count, &rectified_queue](double time, cv::Mat left,
-                                                 cv::Mat right) {
+        [&rectified_img_count, &rectified_queue, &mutex_rectified](
+            double time, cv::Mat left, cv::Mat right) {
           if (!left.empty() && !right.empty()) {
             cv::Mat img;
             cv::hconcat(left, right, img);
-            rectified_queue.push(img);
+            {
+                std::unique_lock<std::mutex> lock(mutex_rectified);
+                rectified_queue.push(img);
+            }
             ++rectified_img_count;
           }
         });
@@ -51,6 +55,7 @@ int main(int argc, char **argv) {
   auto &&time_beg = times::now();
   while (true) {
     if (!rectified_queue.empty()) {
+      std::unique_lock<std::mutex> lock(mutex_rectified);
       cv::imshow("rectified_img", rectified_queue.front());
       clear(rectified_queue);
     }

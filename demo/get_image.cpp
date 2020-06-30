@@ -19,6 +19,7 @@
 #include "types.h"
 #include <iostream>
 #include <queue>
+#include <mutex>
 
 #define FONT_FACE cv::FONT_HERSHEY_PLAIN
 #define FONT_SCALE 1
@@ -43,9 +44,11 @@ int main(int argc, char **argv) {
   m_pSDK->Init(config);
 
   std::queue<cv::Mat> image_queue;
+  std::mutex mutex_image;
   int img_count = 0;
   double last_img_time = -1.0;
-  m_pSDK->RegistImgCallback([&last_img_time, &img_count, &image_queue](
+  m_pSDK->RegistImgCallback([&last_img_time, &img_count, &image_queue,
+                                &mutex_image](
                                 double time, cv::Mat left, cv::Mat right) {
     if (!left.empty() && !right.empty()) {
       cv::Mat img;
@@ -59,13 +62,17 @@ int main(int argc, char **argv) {
                     FONT_COLOR, THICKNESS);
       }
       last_img_time = time;
-      image_queue.push(img);
+      {
+        std::unique_lock<std::mutex> lock(mutex_image);
+        image_queue.push(img);
+      }
       ++img_count;
     }
   });
   auto &&time_beg = times::now();
   while (true) {
     if (!image_queue.empty()) {
+      std::unique_lock<std::mutex> lock(mutex_image);
       cv::imshow("image", image_queue.front());
       clear(image_queue);
     }

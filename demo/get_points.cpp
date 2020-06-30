@@ -18,7 +18,7 @@
 #include "types.h"
 #include "util_pcl.h"
 #include <queue>
-
+#include <mutex>
 using namespace indem;
 
 template <typename T> void clear(std::queue<T> &q) {
@@ -36,14 +36,18 @@ int main(int argc, char **argv) {
 
   m_pSDK->Init(config);
   std::queue<cv::Mat> points_queue;
+  std::mutex mutex_points;
   int points_count = 0;
   if (m_pSDK->EnablePointProcessor()) {
     // m_pSDK->EnableLRConsistencyCheck();
     // m_pSDK->SetDepthCalMode(DepthCalMode::HIGH_ACCURACY);
     m_pSDK->RegistPointCloudCallback(
-        [&points_count, &points_queue](double time, cv::Mat points) {
+        [&points_count, &points_queue, &mutex_points](double time, cv::Mat points) {
           if (!points.empty()) {
-            points_queue.push(points);
+            {
+                std::unique_lock<std::mutex> lock(mutex_points);
+                points_queue.push(points);
+            }
             ++points_count;
           }
         });
@@ -52,6 +56,7 @@ int main(int argc, char **argv) {
   auto &&time_beg = times::now();
   while (true) {
     if (!points_queue.empty()) {
+      std::unique_lock<std::mutex> lock(mutex_points);
       pcviewer.Update(points_queue.front());
       clear(points_queue);
     }

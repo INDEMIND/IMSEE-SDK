@@ -20,7 +20,7 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/opencv.hpp>
 #include <queue>
-
+#include <mutex>
 using namespace indem;
 
 template <typename T> void clear(std::queue<T> &q) {
@@ -38,17 +38,21 @@ int main(int argc, char **argv) {
 
   m_pSDK->Init(config);
   std::queue<cv::Mat> disparity_queue;
+  std::mutex mutex_disparity;
   int disparity_count = 0;
   if (m_pSDK->EnableDisparityProcessor()) {
     m_pSDK->EnableLRConsistencyCheck();
     // m_pSDK->SetDepthCalMode(DepthCalMode::HIGH_ACCURACY);
     m_pSDK->RegistDisparityCallback(
-        [&disparity_count, &disparity_queue](double time, cv::Mat disparity) {
+        [&disparity_count, &disparity_queue, &mutex_disparity](double time, cv::Mat disparity) {
           if (!disparity.empty()) {
             disparity.convertTo(disparity, CV_8U, 255. / (16 * 64));
             cv::applyColorMap(disparity, disparity, cv::COLORMAP_JET);
             disparity.setTo(0, disparity == -16);
-            disparity_queue.push(disparity);
+            {
+                std::unique_lock<std::mutex> lock(mutex_disparity);
+                disparity_queue.push(disparity);
+            }
             ++disparity_count;
           }
         });
@@ -56,6 +60,7 @@ int main(int argc, char **argv) {
   auto &&time_beg = times::now();
   while (true) {
     if (!disparity_queue.empty()) {
+      std::unique_lock<std::mutex> lock(mutex_disparity);
       cv::imshow("disparity", disparity_queue.front());
       clear(disparity_queue);
     }

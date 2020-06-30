@@ -19,6 +19,7 @@
 #include <mutex>
 #include <queue>
 #include <thread>
+#include <mutex>
 #ifdef WIN32
 #include <Windows.h>
 #define PATH_MAX 4096
@@ -62,8 +63,8 @@ int main(int argc, char **argv) {
 
   std::queue<cv::Mat> image_queue;
   std::queue<ImuData> imu_queue;
-
-  std::mutex mtx;
+  std::mutex mutex_image;
+  std::mutex mutex_imu;
 
   int img_count = 0;
   bool is_stop = false;
@@ -82,6 +83,7 @@ int main(int argc, char **argv) {
         << std::endl;
     while (!is_stop || !imu_queue.empty()) {
       if (!imu_queue.empty()) {
+        std::unique_lock<std::mutex> lock(mutex_imu);
         imu = imu_queue.front();
         ofs << imu.timestamp << ", " << imu.accel[0] << ", " << imu.accel[1]
             << ", " << imu.accel[2] << ", " << imu.gyro[0] << ", "
@@ -99,22 +101,29 @@ int main(int argc, char **argv) {
   });
 
   m_pSDK->RegistImgCallback(
-      [&img_count, &image_queue](double time, cv::Mat left, cv::Mat right) {
+      [&img_count, &image_queue, &mutex_image](double time, cv::Mat left, cv::Mat right) {
         if (!left.empty() && !right.empty()) {
           cv::Mat img;
           cv::hconcat(left, right, img);
-          image_queue.push(img);
+          {
+              std::unique_lock<std::mutex> lock(mutex_image);
+              image_queue.push(img);
+          }
           ++img_count;
         }
       });
   int imu_count = 0;
-  m_pSDK->RegistModuleIMUCallback([&imu_count, &imu_queue](ImuData imu) {
-    imu_queue.push(imu);
+  m_pSDK->RegistModuleIMUCallback([&imu_count, &imu_queue, &mutex_imu](ImuData imu) {
+    {
+        std::unique_lock<std::mutex> lock(mutex_imu);
+        imu_queue.push(imu);
+     }
     ++imu_count;
   });
   auto &&time_beg = times::now();
   while (true) {
     if (!image_queue.empty()) {
+      std::unique_lock<std::mutex> lock(mutex_image);
       cv::imshow("image", image_queue.front());
       clear(image_queue);
     }

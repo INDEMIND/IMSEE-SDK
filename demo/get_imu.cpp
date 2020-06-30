@@ -17,7 +17,7 @@
 #include "times.h"
 #include "types.h"
 #include <queue>
-
+#include <mutex>
 using namespace indem;
 
 template <typename T> void clear(std::queue<T> &q) {
@@ -36,14 +36,17 @@ int main(int argc, char **argv) {
   m_pSDK->Init(config);
 
   std::queue<cv::Mat> image_queue;
-
+  std::mutex mutex_image;
   int img_count = 0;
   m_pSDK->RegistImgCallback(
-      [&img_count, &image_queue](double time, cv::Mat left, cv::Mat right) {
+      [&img_count, &image_queue, &mutex_image](double time, cv::Mat left, cv::Mat right) {
         if (!left.empty() && !right.empty()) {
           cv::Mat img;
           cv::hconcat(left, right, img);
-          image_queue.push(img);
+          {
+            std::unique_lock<std::mutex> lock(mutex_image);
+            image_queue.push(img);
+          }
           ++img_count;
         }
       });
@@ -63,6 +66,7 @@ int main(int argc, char **argv) {
   auto &&time_beg = times::now();
   while (true) {
     if (!image_queue.empty()) {
+      std::unique_lock<std::mutex> lock(mutex_image);
       cv::imshow("image", image_queue.front());
       clear(image_queue);
     }
