@@ -16,7 +16,7 @@ IMSEE-SDK是indemind双目惯性模组的软件开发工具包。模组采用“
 ## 文档
 
 * [API Doc](https://github.com/indemind/IMSEE-SDK/releases): API reference, some guides and data spec.
-  * zh-Hans: [![](https://img.shields.io/badge/Online-HTML-blue.svg?style=flat)](https://imsee-sdk-docs.readthedocs.io/en/latest/)
+  * zh-Hans: [![](https://img.shields.io/badge/Online-HTML-blue.svg?style=flat)](https://imsee-sdk-docs.readthedocs.io/zh/latest/)
 
 
 
