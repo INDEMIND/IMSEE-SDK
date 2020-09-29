@@ -370,9 +370,9 @@ public:
       config.bSlam = false;
       int index;
 
-      nh_.getParam("/indemind_node/resolution_index", index);
-      nh_.getParam("/indemind_node/framerate", config.imgFrequency);
-      nh_.getParam("/indemind_node/imu_frequency", config.imuFrequency);
+      nh_.getParam("/imsee/imsee_wrapper_node/resolution_index", index);
+      nh_.getParam("/imsee/imsee_wrapper_node/framerate", config.imgFrequency);
+      nh_.getParam("/imsee/imsee_wrapper_node/imu_frequency", config.imuFrequency);
 
       switch (index) {
       case 1:
