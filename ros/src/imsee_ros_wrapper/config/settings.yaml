@@ -1,5 +1,5 @@
 # process setting
-enable_rectified: false
+enable_rectified: true
 enable_disparity: false
 enable_depth: false
 enable_point: false
@@ -9,6 +9,6 @@ enable_detector: false
 # resolutuin index: 1 = IMG_640(640X400), 2 = IMG_1280(1280X800)
 resolution_index: 1
 # image frame rate range: IMG_640: 25, 50, 100, 200. IMG_1280: 25 50 100
-framerate: 50
+framerate: 25
 # imu frequency range: 100, 200, 500, 1000
-imu_frequency: 1000
+imu_frequency: 200

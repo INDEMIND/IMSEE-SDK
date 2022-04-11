@@ -48,6 +48,11 @@ find_package(catkin REQUIRED COMPONENTS
   tf
 )
 
+add_message_files(
+  FILES
+  DeviceInfo.msg
+)
+
 generate_messages(
    DEPENDENCIES
    std_msgs
